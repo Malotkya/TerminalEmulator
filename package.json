@@ -1,0 +1,17 @@
+{
+  "name": "terminal",
+  "version": "1.0.0",
+  "description": "A fun terminal emulator, that plays with the graphics library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx webpack-cli"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.81.0",
+    "webpack-cli": "^5.0.2"
+  }
+}
