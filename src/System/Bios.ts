@@ -1,6 +1,6 @@
 /** Bios.ts
  * 
- * @authro Alex Malotky
+ * @author Alex Malotky
  */
 import * as Keyboard from "./Keyboard";
 import * as Mouse from './Mouse';
@@ -38,7 +38,7 @@ export default class Bios {
     //External Components
     private _system: System;
     private _overideKey: Array<Keyboard.Key_Code>;
-    private _target: Element;
+    private _target: HTMLElement;
     private _gl: CanvasRenderingContext2D;
     
     //Used for rendering the image
@@ -59,7 +59,7 @@ export default class Bios {
      * @param target 
      * @param system 
      */
-    constructor(target: Element, system: System){
+    constructor(target: HTMLElement, system: System){
         //Used to pass calls back up
         this._system = system;
 
@@ -86,6 +86,14 @@ export default class Bios {
             Keyboard.Key_Code.ARROW_DOWN,
         ];
 
+        //Stylings
+        this._target.style.margin = "0 auto";
+        this._target.style.maxHeight = "75vh";
+        this._target.style.overflowX = "hidden";
+        this._target.style.overflowY = "scroll";
+
+        this._gl.canvas.tabIndex = 1;
+
         //Set defaul values
         this._backgroundColor = Default.COLOR_BACKGROUND;
         this._fontColor = Default.COLOR_FONT;
@@ -93,19 +101,12 @@ export default class Bios {
         this.width = Default.SCREEN_WIDTH;
         this.height = Default.SCREEN_HEIGHT;
         
-        this.grow(true);
-
-        //Stylings
-        this._gl.canvas.style.margin = "0 auto";
-        this._gl.canvas.style.maxHeight = "75vh";
-        this._gl.canvas.style.overflowX = "hidden";
-        this._gl.canvas.style.overflowY = "scroll";
-        this._gl.canvas.tabIndex = 1;
+        //this.grow(true);
 
         //Event listeners
-        this._gl.canvas.addEventListener("keydown", this.onKeyDown);
-        this._gl.canvas.addEventListener("keyup", this.onKeyUp)
-        this._gl.canvas.addEventListener("keypress", this.onKeyPress);
+        this._gl.canvas.addEventListener("keydown", event=>this.onKeyDown(event));
+        this._gl.canvas.addEventListener("keyup", event=>this.onKeyUp(event))
+        this._gl.canvas.addEventListener("keypress", event=>this.onKeyPress(event));
 
         //Start animations
         this._gl.fillStyle = this._fontColor;
@@ -163,7 +164,7 @@ export default class Bios {
      * @param s 
      * @returns nothing
      */
-    public sleep(s:number = 100): Promise<void>{
+    public static sleep(s:number = 100): Promise<void>{
         return new Promise((r,x)=>window.setTimeout(r,s));
     }
 
@@ -188,7 +189,7 @@ export default class Bios {
         this._width = value;
         value *= this._charWidth;
         this._target.setAttribute( "width", value.toString());
-        this._gl.canvas.style.width = `${value}px`
+        this._gl.canvas.width = value;
     }
     public get width(){
         return this._width;
@@ -201,7 +202,7 @@ export default class Bios {
         this._height = value;
         value *= this._charHeight;
         this._target.setAttribute( "height", value.toString());
-        this._gl.canvas.style.height = `${value}px`
+        this._gl.canvas.height = value;
     }
     public get height(){
         return this._height;
@@ -273,7 +274,7 @@ export default class Bios {
             c = c.charAt(1);
 
         this._gl.fillStyle = this._fontColor;
-        this._gl.fillText(c, (x-1)*this._charWidth, (y*this._charHeight));
+        this._gl.fillText(c, (x+1)*this._charWidth, (y+1)*this._charHeight);
     }
 
     /** Prints the stirng at the current location of the system.
@@ -284,13 +285,13 @@ export default class Bios {
         for(let i=0; i<s.length; i++) {
             let char = s.charAt(i);
             if(char == '\n' || char == '\r') {
-                this.x = 1;
+                this.x = 0;
                 this.y++;
             } else {
                 this.put(this.x,this.y,char);
                 this.x++;
                 if(this.x > this.width) {
-                    this.x = 1;
+                    this.x = 0;
                     this.y++;
                 }
 

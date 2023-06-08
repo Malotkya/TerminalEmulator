@@ -1,22 +1,30 @@
+/** System.ts
+ * 
+ * @author Alex Malotky
+ */
 import Bios from "./Bios";
 import View from "./View";
+import Stream from "./Stream";
 import App from "../App";
 import { Key_Code, getKeyPressed } from "./Keyboard";
 
+/** System Class
+ * 
+ */
 export default class System {
     private _bios: Bios;
 
     private _callstack: Array<any>;
     private _apps: Array<App>;
 
-    private _input: any;
-    private _output: any;
+    private _input: Stream;
+    private _output: Stream;
 
     private _protected: boolean;
     private _view: View | null;
 
     constructor(targetID: string){
-        let target = document.querySelector(targetID);
+        let target: HTMLElement = document.querySelector(targetID);
         if(target === null)
             throw new Error("Unable to find target!");
 
@@ -25,8 +33,8 @@ export default class System {
         this._callstack = [];
         this._apps = [];
 
-        this._input = {};
-        this._output = {};
+        this._input = new Stream();
+        this._output = new Stream();
 
         this._protected = false;
         this._view = null;
@@ -105,9 +113,8 @@ export default class System {
             case Key_Code.ENTER:
                 this._input.add( getKeyPressed(key) );
                 if(!this._protected && this._view === null){
-                    this._output.add(this._input.buffer);
+                    this._output.add(this._input.flush());
                 }
-                this._input.clear();
                 break;
 
             default:
@@ -117,8 +124,8 @@ export default class System {
     }
 
     reset(){
-        this._input.reset();
-        this._output.reset();
+        this._input.clear();
+        this._output.clear();
     }
 
     close(){
@@ -143,8 +150,8 @@ export default class System {
     async getView(){
         this._output.clear();
 
-        while(this._output.stream.legnth > 0){
-            await this._bios.sleep();
+        while(!this._output.isReady()){
+            await Bios.sleep();
         }
         this._view = new View(this._bios.view());
         return this._view;
@@ -159,17 +166,16 @@ export default class System {
         } else {
 
             //Normal Render
-            if(this._output.stream.length > 0) {
-                this._bios.print(this._output.stream);
-                this._output.stream = "";
+            if(this._output.isReady()) {
+                this._bios.print(this._output.flush());
             }
 
             let x = this._bios.x;
             let y = this._bios.y;
 
-            let output = char => {
+            let output = (char: string) => {
                 if(char == '\n' || char == '\r') {
-                    x = 1;
+                    x = 0;
                     y++;
                 }  else {
                     this._bios.put(x,y,char);
@@ -178,7 +184,7 @@ export default class System {
 
 
                 if(x > this._bios.width) {
-                    x = 1;
+                    x = 0;
                     y++;
                 }
 
@@ -188,13 +194,13 @@ export default class System {
                 }
             }
 
-            [...this._output.buffer].forEach(char => output(char));
-
             if( !this._protected) {
-                [...this._input.buffer].forEach(char => output(char));
+                for(let char of this._input.flush()){
+                    output(char)
+                }
             }
 
-            this._bios.put(x, y, this._input.cursor);
+            this._bios.put(x, y, "█");
         }
     }
 }
