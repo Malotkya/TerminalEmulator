@@ -4,7 +4,7 @@
  */
 import Bios from "./Bios";
 import View from "./View";
-import Stream from "./Stream";
+import {InputStream, OutputStream} from "./Stream";
 import App from "../App";
 import { Key_Code, getKeyPressed } from "./Keyboard";
 
@@ -17,8 +17,8 @@ export default class System {
     private _callstack: Array<any>;
     private _apps: Array<App>;
 
-    private _input: Stream;
-    private _output: Stream;
+    private _input: InputStream;
+    private _output: OutputStream;
 
     private _protected: boolean;
     private _view: View | null;
@@ -33,8 +33,8 @@ export default class System {
         this._callstack = [];
         this._apps = [];
 
-        this._input = new Stream();
-        this._output = new Stream();
+        this._input = new InputStream();
+        this._output = new OutputStream();
 
         this._protected = false;
         this._view = null;

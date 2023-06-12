@@ -8,13 +8,13 @@ import Bios from "./Bios";
  * This class acts like a stream to handle inputs and outputs.
  */
 export default class Stream {
-    private _buffer: string;
+    protected _buffer: string;
 
-    constructor(){
+    public constructor(){
         this._buffer = "";
     }
 
-    private pull(index: number){
+    protected pull(index: number){
         if(index >= 0){
             let temp = this._buffer.substring(0, index);
             if(temp !== "")
@@ -23,32 +23,38 @@ export default class Stream {
         return null;
     }
 
-    add(s: string|Object){
+    public add(s: string|Object){
         this._buffer += s;
     }
 
-    remove(){
+    public remove(){
         this._buffer = this._buffer.slice(0, -1);
     }
 
-    set(s: string){
+    public set(s: string){
         this._buffer = s;
     }
 
-    clear(){
+    public clear(){
         this._buffer = "";
     }
 
-    isReady(){
+    public isReady(){
         return this._buffer.length !== 0;
     }
 
-    flush(){
+    public flush(){
         let output = this._buffer;
         this._buffer = "";
         return output;
     }
+}
 
+export class InputStream extends Stream {
+    public flush() {
+        return this._buffer;
+    }
+    
     async get(char:string|undefined){
         while(true){
             let index = 1;
@@ -81,4 +87,8 @@ export default class Stream {
             await Bios.sleep();
         }
     }
+}
+
+export class OutputStream extends Stream {
+    
 }
