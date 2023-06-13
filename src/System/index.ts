@@ -15,7 +15,7 @@ export default class System {
     private _bios: Bios;
 
     private _callstack: Array<any>;
-    private _apps: Array<App>;
+    private _apps: Map<string, App>;
 
     private _input: InputStream;
     private _output: OutputStream;
@@ -31,7 +31,7 @@ export default class System {
         this._bios = new Bios(target, this);
 
         this._callstack = [];
-        this._apps = [];
+        this._apps = new Map();
 
         this._input = new InputStream();
         this._output = new OutputStream();
@@ -61,10 +61,10 @@ export default class System {
 
     public addApp(app: App){
         if(app instanceof App){
-            if(this._apps[app.call])
+            if(this._apps.has(app.call))
                 throw new Error("Call is already in use");
 
-            this._apps[app.call] = app;
+            this._apps.set(app.call, app);
         } else {
             throw new Error("Not an App!");
         }
@@ -92,7 +92,7 @@ export default class System {
     }
 
     getApp(call:string){
-        return this._apps[call.toLowerCase()];
+        this._apps.get(call.toLowerCase());
     }
 
     event(key: Key_Code){
