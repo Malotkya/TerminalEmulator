@@ -21,7 +21,7 @@ export default class App{
         }
     }
 
-    protected moveHistory(it: number){
+    public moveHistory(it: number){
         if(this._history.list.length > 0) {
             this._history.location += it;
 
@@ -36,7 +36,7 @@ export default class App{
             return this._history.list[this._history.location];
         }
 
-        return null;
+        return undefined;
     }
 
     protected addToHistory(s:string){
@@ -44,7 +44,7 @@ export default class App{
         this._history.location = this._history.list.length;
     }
 
-    public main(system: System, args: any){
+    public async main(system: System, args: any){
         system.println("Hello World!");
     }
 
