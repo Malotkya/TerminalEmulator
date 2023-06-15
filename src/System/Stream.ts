@@ -51,9 +51,6 @@ export default class Stream {
 }
 
 export class InputStream extends Stream {
-    public flush() {
-        return this._buffer;
-    }
     
     async get(char:string|undefined){
         while(true){
@@ -86,6 +83,10 @@ export class InputStream extends Stream {
 
             await Bios.sleep();
         }
+    }
+
+    public get buffer(){
+        return this._buffer;
     }
 }
 
