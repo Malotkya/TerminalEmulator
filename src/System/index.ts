@@ -14,7 +14,7 @@ import { Key_Code, getKeyPressed } from "./Keyboard";
 export default class System {
     private _bios: Bios;
 
-    private _callstack: Array<any>;
+    private _callstack: Array<App>;
     private _apps: Map<string, App>;
 
     private _input: InputStream;
@@ -26,7 +26,7 @@ export default class System {
     constructor(targetID: string){
         let target: HTMLElement = document.querySelector(targetID);
         if(target === null)
-            throw new Error("Unable to find target!");
+            throw new Error("Unable to find target: " + targetID);
 
         this._bios = new Bios(target, this);
 
@@ -49,7 +49,7 @@ export default class System {
         this._input.clear();
     }
 
-    public addFunction(call:string, description: string, callback: (s:System, a:any)=>void){
+    public addFunction(call:string, description: string, callback: (s:System, a:any)=>Promise<void>){
         if( (typeof call === "string") && (typeof description === "string")
                 && (typeof callback === "function") ){
             let buffer = new App(call, description);
@@ -92,22 +92,25 @@ export default class System {
     }
 
     getApp(call:string){
-        this._apps.get(call.toLowerCase());
+        return this._apps.get(call.toLowerCase());
     }
 
     event(key: Key_Code){
-        let update: string = "";
         switch(key){
             case Key_Code.BACK_SPACE:
                 this._input.remove();
                 break;
             
             case Key_Code.ARROW_UP:
-                this._input.set(this.current.moveHistory(-1));
-                break;
-
             case Key_Code.ARROW_DOWN:
-                this._input.set(this.current.moveHistory(1));
+                let value: string = undefined;
+                if(key == Key_Code.ARROW_UP)
+                    value = this.current.moveHistory(-1);
+                else
+                    value = this.current.moveHistory(1);
+
+                if(value)
+                    this._input.set(value);
                 break;
 
             case Key_Code.ENTER:
@@ -195,7 +198,7 @@ export default class System {
             }
 
             if( !this._protected) {
-                for(let char of this._input.flush()){
+                for(let char of this._input.buffer){
                     output(char)
                 }
             }
