@@ -114,11 +114,10 @@ export default class System {
                 break;
 
             case Key_Code.ENTER:
-                this._input.add( getKeyPressed(key) );
                 if(!this._protected && this._view === null){
-                    this._output.add(this._input.flush());
+                    this._output.add(this._input.buffer);
                 }
-                break;
+                this._input.clean();
 
             default:
                 this._input.add( getKeyPressed(key) );
@@ -169,14 +168,10 @@ export default class System {
         } else {
 
             //Normal Render
-            if(this._output.isReady()) {
-                this._bios.print(this._output.flush());
-            }
-
             let x = this._bios.x;
             let y = this._bios.y;
 
-            let output = (char: string) => {
+            const output = (char: string) => {
                 if(char == '\n' || char == '\r') {
                     x = 0;
                     y++;
@@ -194,6 +189,12 @@ export default class System {
                 if(y > this._bios.totalHeight()) {
                     this._bios.grow();
                     this._bios.scroll(y);
+                }
+            }
+
+            if(this._output.isReady()) {
+                for(let char of this._output.flush()){
+                    output(char);
                 }
             }
 

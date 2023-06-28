@@ -43,14 +43,33 @@ export default class Stream {
         return this._buffer.length !== 0;
     }
 
-    public flush(){
-        let output = this._buffer;
-        this._buffer = "";
-        return output;
+    public flush(i: number = this._buffer.length){
+        return this._buffer.slice(0, i);
     }
 }
 
 export class InputStream extends Stream {
+    private _print: string;
+
+    public constructor(){
+        super();
+        this._print = "";
+    }
+
+    public set(s: string){
+        this._print = s;
+        this._buffer = s;
+    }
+
+    public add(s: string){
+        this._print += s;
+        this._buffer += s;
+    }
+
+    public remove(){
+        this._buffer = this._buffer.slice(0, -1);
+        this._print = this._print.slice(0, -1);
+    }
     
     async get(char:string|undefined){
         while(true){
@@ -73,11 +92,13 @@ export class InputStream extends Stream {
 
             let temp = this.pull(n);
             if(temp !== null){
+                this.flush(n);
                 return temp;
             }
 
             temp = this.pull(r);
             if(temp !== null){
+                this.flush(r);
                 return temp;
             }
 
@@ -86,7 +107,11 @@ export class InputStream extends Stream {
     }
 
     public get buffer(){
-        return this._buffer;
+        return this._print;
+    }
+
+    public clean(){
+        this._print = "";
     }
 }
 
