@@ -4,7 +4,7 @@
   "description": "A fun terminal emulator, that plays with the graphics library.",
   "main": "index.js",
   "scripts": {
-    "test": "npx webpack-cli"
+    "dev": "npx webpack-cli"
   },
   "author": "",
   "license": "ISC",
