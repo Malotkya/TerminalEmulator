@@ -91,6 +91,10 @@ export default class System {
         return this._callstack;
     }
 
+    [Symbol.iterator](){
+        return this._apps.keys();
+    }
+
     getApp(call:string){
         return this._apps.get(call.toLowerCase());
     }
