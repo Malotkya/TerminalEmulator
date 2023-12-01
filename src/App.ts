@@ -45,7 +45,11 @@ export default class App{
     }
 
     public async main(system: System, args: any){
-        system.println("Hello World!");
+        throw new Error("Main called in Bass App class!");
+    }
+
+    public help(system:System){
+        throw new Error("Help called in Bass App class!");
     }
 
     get call(){
