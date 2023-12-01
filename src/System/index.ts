@@ -114,10 +114,12 @@ export default class System {
                 break;
 
             case Key_Code.ENTER:
+                this._input.add( getKeyPressed(key) );
                 if(!this._protected && this._view === null){
                     this._output.add(this._input.buffer);
                 }
                 this._input.clean();
+                break;
 
             default:
                 this._input.add( getKeyPressed(key) );
