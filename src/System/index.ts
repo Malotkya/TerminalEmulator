@@ -71,15 +71,13 @@ export default class System {
     }
 
     public async run(args: any){
-        this._output.clear();
         this._input.clear();
 
         let p = await this.current.main(this, args);
         if(this._view !== null){
             this._view?.delete();
-        } else {
-            this._output.clear();
         }
+        
         return p;
     }
 
