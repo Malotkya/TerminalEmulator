@@ -121,7 +121,7 @@ export default class Bios {
         if(resizeWidth){
             this._gl.canvas.width = Number(this._target.getAttribute("width"));
         } else {
-            this._gl.canvas.height = Number(this._target.getAttribute("height"));
+            this._gl.canvas.height += Number(this._target.getAttribute("height"));
         }
 
         this._gl.putImageData(buffer, 0,0);
@@ -188,7 +188,8 @@ export default class Bios {
     public set width(value: number){
         this._width = value;
         value *= this._charWidth;
-        this._target.setAttribute( "width", value.toString());
+        this._target.setAttribute("width", value.toString());
+        this._target.style.width = `${value}px`
         this._gl.canvas.width = value;
     }
     public get width(){
@@ -201,7 +202,8 @@ export default class Bios {
     public set height(value: number){
         this._height = value;
         value *= this._charHeight;
-        this._target.setAttribute( "height", value.toString());
+        this._target.setAttribute("height", value.toString());
+        this._target.style.height = `${value}px`
         this._gl.canvas.height = value;
     }
     public get height(){
@@ -275,7 +277,7 @@ export default class Bios {
 
         this._gl.fillStyle = this._fontColor;
         this._gl.font = this._fontFace;
-        this._gl.fillText(c, (x+1)*this._charWidth, (y+1)*this._charHeight);
+        this._gl.fillText(c, (x+1)*this._charWidth, (y+2)*this._charHeight);
     }
 
     /** Prints the stirng at the current location of the system.
