@@ -100,8 +100,6 @@ export default class Bios {
         this.size = Default.FONT_SIZE;
         this.width = Default.SCREEN_WIDTH;
         this.height = Default.SCREEN_HEIGHT;
-        
-        //this.grow(true);
 
         //Event listeners
         this._gl.canvas.addEventListener("keydown", event=>this.onKeyDown(event));
@@ -136,6 +134,7 @@ export default class Bios {
     private clear(): ImageData{
         this._gl.fillStyle = this._backgroundColor;
         this._gl.fillRect( (this.x*this._charWidth), (this.y*this._charHeight), this._gl.canvas.width, this._charHeight*2);
+        this._gl.fillRect( 0, (this.y*this._charHeight), this._gl.canvas.width, this._gl.canvas.height);
 
         return this._gl.getImageData(0,0,this._gl.canvas.width, this._gl.canvas.height);
     }
