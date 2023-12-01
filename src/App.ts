@@ -44,7 +44,7 @@ export default class App{
         this._history.location = this._history.list.length;
     }
 
-    public async main(system: System, args: any){
+    public async main(system: System, args: Array<string>){
         throw new Error("Main called in Bass App class!");
     }
 

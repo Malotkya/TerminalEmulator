@@ -70,7 +70,7 @@ export default class System {
         }
     }
 
-    public async run(args: any){
+    public async run(args: Array<string>){
         this._input.clear();
 
         let p = await this.current.main(this, args);

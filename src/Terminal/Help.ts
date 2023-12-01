@@ -6,7 +6,7 @@ class Help extends App {
         super("help", "I try to help out how ever I can");
     }
 
-    async main(system:System, args:any){
+    async main(system:System, args: Array<string>){
         if(args[1] === undefined) {
 
             for(const key of system) {

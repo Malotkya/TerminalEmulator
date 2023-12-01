@@ -23,7 +23,7 @@ export default class Termianl extends App{
         system.callstack.push(this);
     }
 
-    async main(system:System, args:any){
+    async main(system:System, args: Array<string>){
         while(this._running){
             system.print("\n$: ");
             let input = await system.getln();
@@ -44,6 +44,6 @@ export default class Termianl extends App{
     }
 
     run(){
-        this._system.run({}).catch(console.error);
+        this._system.run([]).catch(console.error);
     }
 }
