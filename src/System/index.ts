@@ -6,6 +6,7 @@ import Bios from "./Bios";
 import View from "./View";
 import {InputStream, OutputStream} from "./Stream";
 import App from "../App";
+import Settings from "../Terminal/Settings";
 import { Key_Code, getKeyPressed } from "./Keyboard";
 
 /** System Class
@@ -210,5 +211,9 @@ export default class System {
 
             this._bios.put(x, y, "█");
         }
+    }
+
+    getSettingsApp(){
+        return new Settings(this._bios);
     }
 }

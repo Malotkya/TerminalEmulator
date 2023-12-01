@@ -3,6 +3,8 @@ import System from "../System";
 
 import Help from "./Help";
 import About from "./About";
+import Clear from "./Clear";
+import Exit from "./Exit";
 
 export default class Termianl extends App{
     private _running: boolean;
@@ -15,10 +17,10 @@ export default class Termianl extends App{
         this._system = system;
 
         system.addApp(new Help());
-        //system.addApp(new Reset());
-        //system.addApp(new Exit());
+        system.addApp(new Clear());
+        system.addApp(new Exit());
         system.addApp(new About());
-        //system.addApp(new Settings(system.bios));
+        system.addApp(system.getSettingsApp());
 
         system.callstack.push(this);
     }
