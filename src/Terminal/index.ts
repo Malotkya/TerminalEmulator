@@ -25,7 +25,7 @@ export default class Termianl extends App{
 
     async main(system:System, args:any){
         while(this._running){
-            system.print("\n$: ");
+            system.print("\n$:");
             let input = await system.getln();
 
             let cmd = input.split(/\s+/gm);
