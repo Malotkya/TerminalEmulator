@@ -1,7 +1,7 @@
 import App from '../App';
 import System from "../System"
 import Bios from '../System/Bios';
-import * as Default from '../System/Defaults.js';
+import * as Default from '../System/Defaults';
 
 class Settings extends App {
     private _bios: Bios;
