@@ -8,7 +8,7 @@ import * as Default from './Defaults';
 import System from '.';
 import View from "./View";
 
-const MAGIC_WIDTH_NUMBER = 0.55;
+const MAGIC_WIDTH_NUMBER = 0.6;
 
 export interface ViewTemplate {
     top: number,
@@ -48,7 +48,7 @@ export default class Bios {
     private _charHeight: number;
     private _backgroundColor: string;
     private _fontColor: string;
-    private _fontSize: number;
+    private _fontFace: string;
 
     //Might be public?? TODO: comeback and check.
     public x: number;
@@ -155,7 +155,7 @@ export default class Bios {
      * @returns 
      */
     public totalHeight(): number{
-        return Math.floor(this._gl.canvas.height / this._fontSize);
+        return Math.floor(this._gl.canvas.height / this._charHeight);
     }
 
     /** Sleep
@@ -171,14 +171,15 @@ export default class Bios {
      * 
      */
     public set size(value:number){
-        this._fontSize = value;
-        this._gl.font = `${this._fontSize}px monospace`;
+        this._fontFace = `${value}px monospace`;
+        this._gl.font = this._fontFace;
+        this._gl.textAlign = "center";
 
         this._charWidth = value * MAGIC_WIDTH_NUMBER;
         this._charHeight = value;
     }
     public get size(){
-        return this._fontSize;
+        return this._charWidth;
     }
 
     /** Display Width Setter/Getter
@@ -212,7 +213,7 @@ export default class Bios {
      * @param targetHeight 
      */
     public scroll(targetHeight:number){
-        window.setTimeout(()=>this._target.scrollTop = (targetHeight + 2) * this._fontSize, 10);
+        window.setTimeout(()=>this._target.scrollTop = (targetHeight + 2) * this._charHeight, 10);
     }
 
     /** Shutdown
@@ -228,7 +229,7 @@ export default class Bios {
      * @returns y-axis top of view
      */
     public view(): ViewTemplate{
-        let top = (this.y-1) * this._fontSize;
+        let top = (this.y-1) * this._charHeight;
 
         this.y += this.height;
         this.x = 1;
@@ -253,7 +254,7 @@ export default class Bios {
                 width: this._charWidth,
                 height: this._charHeight,
                 color: this._fontColor,
-                size: this._fontSize,
+                size: this._charHeight,
                 string: this._gl.font
             },
             background: {
@@ -273,6 +274,7 @@ export default class Bios {
             c = c.charAt(1);
 
         this._gl.fillStyle = this._fontColor;
+        this._gl.font = this._fontFace;
         this._gl.fillText(c, (x+1)*this._charWidth, (y+1)*this._charHeight);
     }
 
