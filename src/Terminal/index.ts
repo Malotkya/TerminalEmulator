@@ -1,6 +1,9 @@
 import App from "../App";
 import System from "../System";
 
+import Help from "./Help";
+import About from "./About";
+
 export default class Termianl extends App{
     private _running: boolean;
     private _system: System;
@@ -11,10 +14,10 @@ export default class Termianl extends App{
         this._running = true;
         this._system = system;
 
-        //system.addApp(new Help());
+        system.addApp(new Help());
         //system.addApp(new Reset());
         //system.addApp(new Exit());
-        //system.addApp(new About());
+        system.addApp(new About());
         //system.addApp(new Settings(system.bios));
 
         system.callstack.push(this);
