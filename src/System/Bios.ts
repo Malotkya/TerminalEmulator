@@ -8,7 +8,7 @@ import * as Default from './Defaults';
 import System from '.';
 import View from "./View";
 
-const MAGIC_WIDTH_NUMBER = 0.6;
+const MAGIC_WIDTH_NUMBER = 0.55;
 
 export interface ViewTemplate {
     top: number,
